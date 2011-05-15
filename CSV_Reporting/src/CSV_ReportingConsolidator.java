@@ -1,8 +1,8 @@
 /*==============================================================================================
- *   Name: CSV Performance Test report consolidating automation utility
+ *  Name: CSV Performance Test report consolidating automation utility
  *  Author: Barbuta Mihail-Gabriel - barbuta.mihail@ro.ibm.com
  *  Company: IBM Romania - Global Delivery Center Bucharest
- *  Date: 2011-05-15 / Revision: N/A
+ *  Date: 2011-05-15 / Revision: 1.3
  *  
  *  Developed during Yahoo! Open Hack, Bucharest, 14-15 May 2011
  *	
@@ -135,7 +135,17 @@ public class CSV_ReportingConsolidator {
 				nextLine = csvFile.readNext();
 
 				// Retrieve final summary data, which is always on the last row: 
-				elapsedTime = Integer.parseInt(nextLine[0]);
+				elapsedTime = Integer.parseInt(nextLine[0])/1000;
+								
+				int hours = elapsedTime / 3600,
+				remainder = elapsedTime % 3600,
+				minutes = remainder / 60,
+				seconds = remainder % 60;
+
+				String eTime = (hours < 10 ? "0" : "") + hours
+				 + ":" + (minutes < 10 ? "0" : "") + minutes
+				 + ":" + (seconds< 10 ? "0" : "") + seconds;
+				
 				completedUsers = Integer.parseInt(nextLine[5]);
 				TPA = (int)Double.parseDouble(nextLine[8]);
 				TPH = (int)Double.parseDouble(nextLine[9]);
@@ -200,7 +210,7 @@ public class CSV_ReportingConsolidator {
 				// Serialize all retrieved performance parameters:
 				String[] entries = {PTrun,startTime,
 						String.valueOf(completedUsers),
-						String.valueOf(elapsedTime),
+						eTime,
 						String.valueOf(TPA),
 						String.valueOf(TPH),
 						String.valueOf(PRT),
@@ -226,5 +236,6 @@ public class CSV_ReportingConsolidator {
 			}
 		}
 		writer.close();						// Close the CSV writer
+		
 	}
 }
