@@ -29,15 +29,11 @@ public class CSV_ReportingConsolidator {
 		File folder = new File(path);				// Load the selected path
 		File[] listOfFiles = folder.listFiles(); 	// Retrieve the list of files from the directory
 		
-		// Write the output CSV header
+		// Serialize the reference headers to write the output CSV header
+		CSVReader referenceReader = new CSVReader(new FileReader("/reference/example_fields.csv"));
+		String [] referenceHeaders = referenceReader.readNext();
 		CSVWriter writer = new CSVWriter(new FileWriter("output/output.csv"), ',', CSVWriter.NO_QUOTE_CHARACTER);
-		String[] headers = {"Performance Test Run","Run Start Time","Users","Elapsed Time",
-							"TPA","TPH","PRT","PRd","MRT","mRT","TEA","TEH","ERT","ERd","",
-							"IBM CareerSmart - Home","IBM CareerSmart - Sign In","IBM CareerSmart - Main Page",
-							"IBM CareerSmart - Gain Experience","IBM CareerSmart - Track Capabilities","",
-							"Learning@IBM - Sign In","Learning@IBM - My Enrollments",
-							"Learning@IBM - My Completed Learning","ibmservices_transcripts"};
-		writer.writeNext(headers);
+		writer.writeNext(referenceHeaders);
 		
 		for (int i = 0; i < listOfFiles.length; i++) 
 		{
