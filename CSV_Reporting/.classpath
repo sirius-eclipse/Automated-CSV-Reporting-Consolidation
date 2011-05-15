@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src"/>
+	<classpathentry kind="src" output="target/test-classes" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_25"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="D:/Home/Documents/Eclipse Workspace/opencsv-2.3/deploy/opencsv-2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Home/Documents/Eclipse Workspace/opencsv-2.3/lib/junit-4.7.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/eclipse/plugins/org.eclipse.jdt.ui_3.6.2.r362_v20110203.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
