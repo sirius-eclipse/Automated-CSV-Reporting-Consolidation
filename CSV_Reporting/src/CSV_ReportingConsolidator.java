@@ -30,9 +30,9 @@ public class CSV_ReportingConsolidator {
 		File[] listOfFiles = folder.listFiles(); 	// Retrieve the list of files from the directory
 		
 		// Serialize the reference headers to write the output CSV header
-		CSVReader referenceReader = new CSVReader(new FileReader("/reference/example_fields.csv"));
+		CSVReader referenceReader = new CSVReader(new FileReader("reference/example_fields.csv"));
 		String [] referenceHeaders = referenceReader.readNext();
-		CSVWriter writer = new CSVWriter(new FileWriter("output/output.csv"), ',', CSVWriter.NO_QUOTE_CHARACTER);
+		CSVWriter writer = new CSVWriter(new FileWriter("output/Consolidated_CSV_Report.csv"), ',', CSVWriter.NO_QUOTE_CHARACTER);
 		writer.writeNext(referenceHeaders);
 		
 		for (int i = 0; i < listOfFiles.length; i++) 

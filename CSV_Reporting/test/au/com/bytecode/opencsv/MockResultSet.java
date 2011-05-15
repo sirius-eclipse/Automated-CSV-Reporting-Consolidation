@@ -764,4 +764,91 @@ public class MockResultSet implements ResultSet {
     public boolean isWrapperFor(Class<?> aClass) throws SQLException {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+
+	@Override
+	public RowId getRowId(int columnIndex) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public RowId getRowId(String columnLabel) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void updateRowId(int columnIndex, RowId x) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void updateRowId(String columnLabel, RowId x) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void updateNClob(String columnLabel, NClob nClob)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public NClob getNClob(int columnIndex) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public NClob getNClob(String columnLabel) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public SQLXML getSQLXML(int columnIndex) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public SQLXML getSQLXML(String columnLabel) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void updateSQLXML(int columnIndex, SQLXML xmlObject)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void updateSQLXML(String columnLabel, SQLXML xmlObject)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
 }
