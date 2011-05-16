@@ -2,7 +2,7 @@
  *  Name: CSV Performance Test report consolidating automation utility
  *  Author: Barbuta Mihail-Gabriel - barbuta.mihail@ro.ibm.com
  *  Company: IBM Romania - Global Delivery Center Bucharest
- *  Date: 2011-05-15 / Revision: N/A
+ *  Date: 2011-05-15 / Revision: 1.5
  *  
  *  Developed during Yahoo! Open Hack, Bucharest, 14-15 May 2011
  *	
@@ -17,9 +17,9 @@
  *
  *	An automated program that can consolidate massive amounts of CSV reports.
  *
- *	Implemented using J2SE and OpenCSV libraries, this class will fetch all individual reports from 
- *	a directory, parse the performance data, and write it into a single report that can be imported 
- *	in a spreadsheet or publishing software.
+ *	Implemented using J2SE and OpenCSV libraries, this class will fetch all individual reports
+ *	from a directory, parse the performance data, and write it into a single report that can be 
+ *	imported in a spreadsheet or publishing software.
  *
  *==============================================================================================
  */
