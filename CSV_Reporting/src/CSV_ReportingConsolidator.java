@@ -42,7 +42,7 @@ public class CSV_ReportingConsolidator {
 				System.out.println("== Processed: " + filename + " ===========================");
 				
 				if (!filename.endsWith("csv"))	{				// Check if the file has a CSV extension
-					System.out.println("The path contains non-csv files. Please remove them and try again.");
+					System.out.println("The input path contains non-csv files. Please remove them and try again.");
 					System.exit(1);								// Exit if non-CSV files are found
 				}
 				
@@ -93,64 +93,50 @@ public class CSV_ReportingConsolidator {
 		        	Page[colIterator] = nextLine[colIterator+18];
 		        	colIterator++;
 		        }
-		        
-		        // Skip all rows except the last 5 that contain the summary data:
-		        while (rowIterator < rowCount-5) {
+		        		        
+		        // Skip all rows except the last row containing summary data:
+		        nextLine = csvFile.readNext();
+		        nextLine = csvFile.readNext();
+		        while (rowIterator < rowCount-4) {
+		        	// Attempt to retrieve the summary data in the last rows, 3 rows allowance:
+			        if (nextLine[10].length() != 0)	{
+			        	PRT = Double.parseDouble(nextLine[10]);
+			        }	
+			        if (nextLine[11].length() != 0)	{
+						PRd = Double.parseDouble(nextLine[11]);
+			        }
+			        if (nextLine[16].length() != 0)	{
+						ERT = Double.parseDouble(nextLine[16]);
+			        }
+			        if (nextLine[17].length() != 0)	{
+						ERd = Double.parseDouble(nextLine[17]);
+			        }
+			        if (nextLine[12].length() != 0)	{
+						MRT = Integer.parseInt(nextLine[12]);
+		        	}
+					if (nextLine[13].length() != 0)	{
+						mRT = Integer.parseInt(nextLine[13]);
+			        }
 					nextLine = csvFile.readNext();
 					rowIterator++;
 				}
-				
-		        // Attempt to retrieve the summary data in the last rows, 3 rows allowance:
-		        if (nextLine[10].length() != 0)	{
-		        	PRT = Double.parseDouble(nextLine[10]);
-					PRd = Double.parseDouble(nextLine[11]);
-					ERT = Double.parseDouble(nextLine[16]);
-					ERd = Double.parseDouble(nextLine[17]);
-					MRT = Integer.parseInt(nextLine[12]);
-					mRT = Integer.parseInt(nextLine[13]);
-		        }
-				
-				nextLine = csvFile.readNext();
-				
-		        if (nextLine[10].length() != 0)	{
-		        	PRT = Double.parseDouble(nextLine[10]);
-					PRd = Double.parseDouble(nextLine[11]);
-					ERT = Double.parseDouble(nextLine[16]);
-					ERd = Double.parseDouble(nextLine[17]);
-					MRT = Integer.parseInt(nextLine[12]);
-					mRT = Integer.parseInt(nextLine[13]);
-		        }
-				
-				nextLine = csvFile.readNext();
-				
-		        if (nextLine[10].length() != 0)	{
-		        	PRT = Double.parseDouble(nextLine[10]);
-					PRd = Double.parseDouble(nextLine[11]);
-					ERT = Double.parseDouble(nextLine[16]);
-					ERd = Double.parseDouble(nextLine[17]);
-					MRT = Integer.parseInt(nextLine[12]);
-					mRT = Integer.parseInt(nextLine[13]);
-		        }
-				
-				nextLine = csvFile.readNext();
 
 				// Retrieve final summary data, which is always on the last row: 
-				elapsedTime = Integer.parseInt(nextLine[0])/1000;
-								
-				int hours = elapsedTime / 3600,
-				remainder = elapsedTime % 3600,
-				minutes = remainder / 60,
-				seconds = remainder % 60;
-
-				String eTime = (hours < 10 ? "0" : "") + hours
-				 + ":" + (minutes < 10 ? "0" : "") + minutes
-				 + ":" + (seconds< 10 ? "0" : "") + seconds;
-				
+				elapsedTime = Integer.parseInt(nextLine[0])/1000;	// Also convert milliseconds to seconds
 				completedUsers = Integer.parseInt(nextLine[5]);
 				TPA = (int)Double.parseDouble(nextLine[8]);
 				TPH = (int)Double.parseDouble(nextLine[9]);
 				TEA = (int)Double.parseDouble(nextLine[14]);
 				TEH = (int)Double.parseDouble(nextLine[15]);
+				
+				// Convert the elapsed time from seconds to HH:MM:SS format
+				int hours = elapsedTime / 3600,
+				remainder = elapsedTime % 3600,
+				minutes = remainder / 60,
+				seconds = remainder % 60;
+				String eTime  = (hours < 10 ? "0" : "") + hours 
+						+ ":" + (minutes < 10 ? "0" : "") + minutes
+						+ ":" + (seconds < 10 ? "0" : "") + seconds;
 				
 				csvFile.close();	// File recycled to reset the line parser
 				CSVReader csvFile2 = new CSVReader(new FileReader(filePath));
