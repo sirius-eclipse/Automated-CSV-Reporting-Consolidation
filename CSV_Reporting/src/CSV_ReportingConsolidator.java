@@ -39,13 +39,16 @@ public class CSV_ReportingConsolidator {
 		String [] referenceHeaders = referenceReader.readNext();
 		CSVWriter writer = new CSVWriter(new FileWriter(outputPath+outputFile), ',', CSVWriter.NO_QUOTE_CHARACTER);
 		
+		System.out.println("-- CSV parser initiated, found " +listOfFiles.length+ " input files.\n");
+		
 		for (int i = 0; i < listOfFiles.length; i++) 
 		{
 			if (listOfFiles[i].isFile()) {
 				String filename = listOfFiles[i].getName();		// Retrieve the file name
 				
 				if (!filename.endsWith("csv"))	{				// Check if the file has a CSV extension
-					System.out.println("The input path contains non-csv files. Please remove them and try again.");
+					System.out.println("EE | Fatal error: The input path contains non-csv files: " +filename+ 
+									   ".\n Please remove them and try again.");
 					writer.close();
 					System.exit(1);								// Exit if non-CSV files are found
 				}
@@ -58,6 +61,7 @@ public class CSV_ReportingConsolidator {
 				int colIterator = 0;	// Used to loop between columns
 				int rowCount = 0;		// Used to count the total number of rows
 				int pageCount = 0;
+				int f = 0;
 				
 				String [] pageName = new String[100];	// Holder for Page names
 				double [] individualPRT = new double[100];	// Holder for Page Response Times
@@ -68,8 +72,8 @@ public class CSV_ReportingConsolidator {
 		        double PRd = 0;			// Page Response Time Standard Deviation
 		        double ERT = 0;			// Average Element Response Time
 		        double ERd = 0;			// Element Response Time Standard Deviation
-		        int MRT = 0;			// Maximum Page Response Time
-		        int mRT = 0;			// Minimum Page Response Time
+		        double MRT = 0;			// Maximum Page Response Time
+		        double mRT = 0;			// Minimum Page Response Time
 				int elapsedTime = 0;	// Test Elapsed Time
 				int completedUsers = 0;	// Number of Completed Users
 				int TPA = 0;			// Total Page Attempts
@@ -95,9 +99,18 @@ public class CSV_ReportingConsolidator {
 					rowIterator++;
 				}
 		        
+		        // Check if there are VP fails (adds another column)
+		        if (nextLine[8].equals("Total Page VPs Failed For Run"))	{
+		        	f = 1;
+		        }
+		        else	{
+		        	f = 0;
+		        }
+		        
+		        
 		        // Read the page titles:
 		        while (colIterator != -1)	{
-		        	pageName[colIterator] = nextLine[colIterator+18];
+		        	pageName[colIterator] = nextLine[colIterator+18+f];
 		        	if((pageName[colIterator].equals(pageName[0])) && colIterator > 0)	{
 		        		pageCount = colIterator;
 		        		pageName[colIterator] = null;
@@ -108,27 +121,26 @@ public class CSV_ReportingConsolidator {
 		        	}
 		        }
 		        
-		        // Retrieve non-continuous performance data
+		        // Retrieve non-continuous performance data, auto-detect gaps, auto-convert in seconds where needed
 		        nextLine = csvFile.readNext();
 		        nextLine = csvFile.readNext();
-		        while (rowIterator < rowCount-4) {
-			        if (nextLine[10].length() != 0)	{	PRT = Double.parseDouble(nextLine[10]);		}	
-			        if (nextLine[11].length() != 0)	{	PRd = Double.parseDouble(nextLine[11]);		}
-			        if (nextLine[16].length() != 0)	{	ERT = Double.parseDouble(nextLine[16]);		}
-			        if (nextLine[17].length() != 0)	{	ERd = Double.parseDouble(nextLine[17]);		}
-			        if (nextLine[12].length() != 0)	{	MRT = Integer.parseInt(nextLine[12]);		}
-					if (nextLine[13].length() != 0)	{	mRT = Integer.parseInt(nextLine[13]);		}
+		        while (rowIterator < rowCount-3) {
+		        	if (nextLine.length > 1)	{	if (nextLine[0].length() != 0)		{ elapsedTime = Integer.parseInt(nextLine[0])/1000;	}}
+		        	if (nextLine.length > 5)	{	if (nextLine[5].length() != 0)		{ completedUsers = Integer.parseInt(nextLine[5]);	}}
+		        	if (nextLine.length > 8+f)	{	if (nextLine[8+f].length() != 0)	{ TPA = (int)Double.parseDouble(nextLine[8+f]);		}}
+		        	if (nextLine.length > 9+f)  {	if (nextLine[9+f].length() != 0)	{ TPH = (int)Double.parseDouble(nextLine[9+f]);		}}
+		        	if (nextLine.length > 14+f) {	if (nextLine[14+f].length() != 0)	{ TEA = (int)Double.parseDouble(nextLine[14+f]);	}}
+		        	if (nextLine.length > 15+f) {	if (nextLine[15+f].length() != 0)	{ TEH = (int)Double.parseDouble(nextLine[15+f]);	}}
+		        	if (nextLine.length > 10+f) {	if (nextLine[10+f].length() != 0)	{ PRT = Double.parseDouble(nextLine[10+f])/1000;	}}
+		        	if (nextLine.length > 11+f) {	if (nextLine[11+f].length() != 0)	{ PRd = Double.parseDouble(nextLine[11+f])/1000;	}}
+		        	if (nextLine.length > 16+f) {	if (nextLine[16+f].length() != 0)	{ ERT = Double.parseDouble(nextLine[16+f])/1000;	}}
+		        	if (nextLine.length > 17+f) {	if (nextLine[17+f].length() != 0)	{ ERd = Double.parseDouble(nextLine[17+f])/1000;	}}
+		        	if (nextLine.length > 12+f) {	if (nextLine[12+f].length() != 0)	{ MRT = Double.parseDouble(nextLine[12+f])/1000;	}}
+		        	if (nextLine.length > 13+f) {	if (nextLine[13+f].length() != 0)	{ mRT = Double.parseDouble(nextLine[13+f])/1000;	}}
+		        	
 					nextLine = csvFile.readNext();
 					rowIterator++;
 				}
-
-				// Retrieve final summary data, which is always on the last row: 
-				elapsedTime = Integer.parseInt(nextLine[0])/1000;	// Also convert milliseconds to seconds
-				completedUsers = Integer.parseInt(nextLine[5]);
-				TPA = (int)Double.parseDouble(nextLine[8]);
-				TPH = (int)Double.parseDouble(nextLine[9]);
-				TEA = (int)Double.parseDouble(nextLine[14]);
-				TEH = (int)Double.parseDouble(nextLine[15]);
 				
 				// Convert the elapsed time from seconds to HH:MM:SS format
 				int hours = elapsedTime / 3600,
@@ -152,11 +164,13 @@ public class CSV_ReportingConsolidator {
 					rowIterator++;
 				}
 				
-				// Dynamically retrieve individual page response times, correlate with page names:
+				// Dynamically retrieve individual page response times in seconds, correlate with page names:
 				while (rowIterator < rowCount)	{
 					while (colIterator < pageCount)	{
-						if (nextLine[colIterator+18].length() != 0)	{
-							individualPRT[colIterator] = Double.parseDouble(nextLine[colIterator+18]);
+						if (nextLine.length > 18+f)	{
+							if (nextLine[colIterator+18+f].length() != 0)	{
+								individualPRT[colIterator] = Double.parseDouble(nextLine[colIterator+18+f])/1000;
+							}
 						}
 						colIterator++;
 					}
