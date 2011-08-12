@@ -100,7 +100,10 @@ public class CSV_ReportingConsolidator {
 				}
 		        
 		        // Check if there are VP fails (adds another column)
-		        if (nextLine[8].equals("Total Page VPs Failed For Run"))	{
+		        if (nextLine[9].equals("Total Page VPs Error For Run"))	{
+		        	f = 2;
+		        }
+		        else if (nextLine[8].equals("Total Page VPs Failed For Run") || nextLine[8].equals("Total Page VPs Error For Run"))	{
 		        	f = 1;
 		        }
 		        else	{
